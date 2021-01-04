@@ -1,84 +1,90 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
 
-struct Bill
+void push();
+void pop();
+void display();
+struct node
 {
-	char name[100];
-	int cost;
-	struct Bill *next;
+    float cost;
+    char name[50];
+    struct node *next;
 };
-struct Bill *head_ref;
+struct node *top=NULL;
 
-
-void push(char new_data[50], int new_cost) {
-	struct Bill new_node = (struct Bill)malloc(sizeof(struct Bill));
-	strcpy(new_node->name, new_data);
-	new_node->cost = new_cost;
-	new_node->next = NULL;
-	if(head_ref == NULL) {
-		head_ref = new_node;
-	}
-	else {
-		new_node->next = head_ref;
-		head_ref = new_node;
-	}
+int main(int argc, char **argv)
+{
+	int choice;
+    char ch;
+    do
+    {
+    printf("\n1. Add item to cart \n2. Display cart  \n3. Remove item from cart\n4.exit\n");
+    printf("\nEnter your choice : ");
+    scanf("%d",&choice);
+    switch(choice)
+    {
+        case 1: push(); break;
+        case 2: display();break;
+        case 3: pop(); break;
+        case 4:break;
+        default:printf("wrong choice\n");
+    }    
+    }while(choice!=4);
 }
 
 
-void pop() {
-	struct Bill *ptr = head_ref;
-	if(head_ref == NULL){
-		printf("List is empty\n");
-	}
-	else {
-		head_ref = ptr->next;
-		ptr->next = NULL;
-		free(ptr);
-	}
+void push()
+{
+    float item;
+    char name1[50];
+    struct node *newnode;
+    printf("Enter the name of item\n");
+    scanf("%s",name1);
+    printf("Enter the cost of item\n");
+    scanf("%f",&item);
+    
+    newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->cost=item;
+    strcpy(newnode->name,name1);
+    newnode->next=NULL;
+    if(top==NULL)
+        top=newnode;
+    else
+        newnode->next=top;
+        top=newnode;
+}
+void pop()
+{
+    if(top==NULL)
+        printf("Cart is empty\n");
+    else
+    {
+      
+      printf("name of element removed is %s:\n", top->name);
+      
+      top=top->next;
+        
+    }
+        
+        
 }
 
-
-void display() {
-	struct Bill *node = head_ref;
-	if (head_ref == NULL)
-	{
-		printf("List is Empty\n");	
-	}
-	while(node != NULL) {
-		printf("%s::> %d\n", node->name, node->cost);
-		node = node->next;
-	}
+void display()
+{
+struct node *temp;
+temp=top;
+if(top==NULL)
+    printf("Cart is empty\n");
+printf("-------------ABC MALL----------\n");
+while(temp!=NULL)
+{
+    printf("------------------------\n");
+    printf("Name:%s\n",temp->name);
+    printf("Cost:%f\n",temp->cost);
+    
+    temp=temp->next;
+    printf("-------------------------\n");
 }
-
-
-int main() {
-	int a;
-	char data[50];
-	int x;
-	do {
-		printf("***MENU***\n\n");
-		printf("(1)Enter the name and cost of the item::>\n");
-		printf("(2)Pop the item\n");
-		printf("(3)Display the Bill\n");
-		printf("(4)Exit\n\n");
-		printf("\n\nEnter your choice: \n");
-		scanf("%d", &a);
-		switch(a) {
-			case 1: printf("\nEnter name of item: ");
-					scanf("%s", data);
-					printf("\nEnter cost of item: ");
-					scanf("%d", &x);
-					push(data, x);
-					break;
-			case 2: pop();
-					break;
-			case 3: display();
-					break;
-			case 4: exit(0);
-					break;
-			default: printf("\nInvalid option entered.");
-		}
-	} while(a >= 1 && a <= 9);
-	return 0;
+    
 }
